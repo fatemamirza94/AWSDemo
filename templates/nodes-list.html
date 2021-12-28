@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}Instances{% endblock %}</h1>
+	
+	<form>
+		<a href={{ url_for('create_node') }} class="btn btn-primary btn-block">Create New Instance <span class="glyphicon glyphicon-plus-sign"></span></a>
+	</form>
+
+{% endblock %}
+
+
+{% block app_content %}
+	<div>
+		<ul class="list-group">
+			{% for node in nodes %}
+		    <li class="list-group-item">
+		    	<a href={{ url_for('node_details', node_id=node.id) }}>{{ node.name }}</a>
+		    	<span style="float:right">
+		    		<i>{{ node.extra['status'] }}</i>
+		    	</span>
+		    </li>
+		    {% endfor %}
+		</ul>
+	</div>
+	
+{% endblock %}

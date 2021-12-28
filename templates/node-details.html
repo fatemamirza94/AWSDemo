@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}{{ node.name }}{% endblock %}</h1>
+	<h4>{{ node.id }}</h4>
+
+	<h4>
+	{% if node['state'] == 'running' %}
+		<span class="glyphicon glyphicon-ok-sign text-success"></span> Running
+	{% elif node['state'] == 'pending' %}
+		<span class="glyphicon glyphicon-time text-warning"></span> Pending
+	{% elif node['state'] == 'stopping' %}
+		<span class="glyphicon glyphicon-time text-warning"></span> Stopping
+	{% elif node['state'] == 'stopped' %}
+		<span class="glyphicon glyphicon-minus-sign text-danger"></span> Stopped
+	{% else %}
+		<span class="glyphicon glyphicon-info-sign text-primary"></span> {{ node['state'] }}</span>
+	{% endif %}
+	</h4>
+
+	<div class="btn-group" role="group" style="margin-bottom: 20px">
+		<a href={{ url_for('start_node', node_id=node.id) }} type="button" class="btn btn-default {{ 'disabled' if node['state'] in ['running', 'pending', 'stopping', 'shutting-down', 'terminated'] }}"><span class="glyphicon glyphicon-play"></span> Start</a>
+		<a href={{ url_for('stop_node', node_id=node.id) }} type="button" class="btn btn-default {{ 'disabled' if node['state'] in ['stopped', 'pending', 'stopping', 'shutting-down', 'terminated'] }}"><span class="glyphicon glyphicon-pause"></span> Stop</a>
+		<a href={{ url_for('terminate_node', node_id=node.id) }} type="button" class="btn btn-default {{ 'disabled' if node['state'] in ['pending', 'stopping', 'shutting-down', 'terminated'] }}"><span class="glyphicon glyphicon-remove"></span> Terminate</a>
+	</div>
+
+	<h5>
+		<a href={{ url_for('node_stats', node_id=node.id) }}><span class="glyphicon glyphicon-search"></span> CloudWatch</a>
+	</h5>
+{% endblock %}
+
+
+{% block app_content %}
+
+	<div class="panel panel-default">
+		<div class="panel-heading">Instance Information</div>
+
+
+		<table class="table">
+			<tbody>
+				<tr>
+					<td>Instance Type</td>
+					<td>{{ node.type }}</td>
+				</tr>
+				<tr>
+					<td>Image</td>
+					<td>{{ node.image_id }}</td>
+				</tr>
+				<tr>
+					<td>Availability Zone</td>
+					<td>{{ node.zone }}</td>
+				</tr>
+				<tr>
+					<td>Private IP</td>
+					<td>
+						{% for ip in node.private_ips %}
+							{{ ip }}<br />
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Private DNS</td>
+					<td>{{ node.private_dns }}</td>
+				</tr>
+				<tr>
+					<td>Public IP</td>
+					<td>
+						{% for ip in node.public_ips %}
+							{{ ip }}<br />
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Public DNS</td>
+					<td>{{ node.public_dns }}</td>
+				</tr>
+				<tr>
+					<td>Security Groups</td>
+					<td>
+						{% for group in node.security_groups %}
+							{{ group['group_id'] }} ({{ group['group_name'] }})<br />
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Key</td>
+					<td>{{ node.key }}</td>
+
+				</tr>
+
+
+			</tbody>
+		</table>
+	</div>
+		
+{% endblock %}

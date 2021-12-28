@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}Create instance{% endblock %}</h1>
+{% endblock %}
+
+
+{% block app_content %}
+	<form id="create-node" action={{ url_for('create_node') }} method="POST" enctype="multipart/form-data">
+		<form action="" method="post" novalidate>
+			<table class="table">
+				<tr>
+					<td>
+						{{ form.name.label }}
+					</td>
+					<td>
+						{{ form.name(class="form-control") }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{ form.image.label }}
+					</td>
+					<td>
+						{{ form.image(class="form-control") }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{ form.size.label }}
+					</td>
+					<td>
+						{{ form.size(class="form-control") }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{ form.nodes_no.label }}
+					</td>
+					<td>
+						{{ form.nodes_no(class="form-control") }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{ form.key_pair.label }}
+					</td>
+					<td>
+						{{ form.key_pair(class="form-control") }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{ form.security_group.label }}
+					</td>
+					<td>
+						{{ form.security_group(class="form-control") }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{ form.subnet.label }}
+					</td>
+					<td>
+						{{ form.subnet(class="form-control") }}
+					</td>
+				</tr>
+			</table>
+		<p><button type="submit" class="btn btn-primary" style="float: right;">Create</button></p>
+	</form>
+
+
+	
+{% endblock %}

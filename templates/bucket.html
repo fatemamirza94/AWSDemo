@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}Bucket - {{ bucket_name }}{% endblock %}</h1>
+	<form id="file-upload" action={{ url_for('upload_file', bucket_name=bucket_name) }} method="POST" enctype="multipart/form-data">
+		<button id="upload-btn" type="button" class="btn btn-primary btn-block">Upload New File <span class="glyphicon glyphicon-plus-sign"></span></button>
+		<div hidden>{{ form.file }}</div>
+		{{ form.filepath }}
+	</form>
+{% endblock %}
+
+
+{% block app_content %}
+	<ul class="list-group">
+		{% for file in files %}
+	    <li class="list-group-item">
+	    	<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+				<a type="button" href={{ url_for('download_file', bucket_name=bucket_name, file_name=file.name) }} class="btn btn-success"><span class="glyphicon glyphicon-download-alt"></span></a>
+				<a type="button" href={{ url_for('delete_file', bucket_name=bucket_name, file_name=file.name) }} class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+			</div>
+			&nbsp;
+	    	{{ file.name }}
+	    </li>
+	    {% endfor %}
+	</ul>
+
+	
+{% endblock %}
+
+{% block scripts %}
+  	{{ super() }}
+  	<script type="text/javascript">
+	$(function(){		
+		$('#upload-btn').click(function(){
+			$('input#file').click();
+		});
+
+		$('input#file').change(function(){
+			$('form#file-upload').submit();
+		});
+	});
+
+	</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}Create Bucket{% endblock %}</h1>
+{% endblock %}
+
+
+{% block app_content %}
+	<form id="create-bucket" action={{ url_for('create_bucket', ) }} method="POST" enctype="multipart/form-data">
+
+		<div class="form-group">
+			<label for="bucket-name">Name</label>
+		 	<input class="form-control" name="bucket-name" id="bucket-name" type="text">
+		</div>
+		
+		<div role="menu" aria-labelledby="dropdownMenu">
+			<label for="region-name">Region</label>
+			<select class="form-control" name="region-name" id="region-name">
+				{% for region in regions %}
+		    		<option value={{ region }}>{{ region }}</option>
+		    	{% endfor %}
+			</select>
+		</div>
+		<br>
+
+		<p><button type="submit" class="btn btn-primary">Create Bucket</button></p>
+
+	</form>
+
+
+	
+{% endblock %}
+
+{% block scripts %}
+  	{{ super() }}
+  	<script type="text/javascript">
+	$(function(){		
+		$('#upload-btn').click(function(){
+			$('input#file').click();
+		});
+
+		$('input#file').change(function(){
+			$('form#file-upload').submit();
+		});
+	});
+
+	</script>
+{% endblock %}

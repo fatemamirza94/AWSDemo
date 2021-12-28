@@ -1,0 +1,48 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    Welcome to AWS
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <a class="navbar-brand" href={{ url_for('dashboard') }}>Home</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav" style="position:relative; left:40%;">
+                <li><a href={{ url_for('buckets_list') }}>Storage</a></li>
+                <li><a href={{ url_for('nodes_list') }}>Compute</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-globe"></span> {{ get_current_region() }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% for region in get_regions_list() %}
+                            <li><a href={{ url_for('change_region', region=region) }}>{{ region }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block header %}{% endblock %}
+
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}

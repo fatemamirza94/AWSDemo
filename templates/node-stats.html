@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}{{ node.name }} - Monitoring {% endblock %}</h1>
+	<h4>{{ node.id }}</h4>
+{% endblock %}
+
+{% block app_content %}
+
+<h4>CPU Utilization</h4>
+<canvas id="cpu-chart" width="300" height="100"></canvas>
+
+
+<h4>Network I/O</h4>
+<canvas id="network-chart" width="300" height="100"></canvas>
+
+
+<h4>Disk I/O</h4>
+<canvas id="disk-chart" width="300" height="100"></canvas>
+
+{% endblock %}
+
+{% block scripts %}
+  	{{ super() }}
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  	<script type="text/javascript">
+		$(function(){		
+
+			var ctx;
+
+			ctx = $("#cpu-chart")[0].getContext('2d');
+			var cpu_chart = new Chart(ctx, {
+			    type: 'line',
+			    data: {
+			        labels: [{% for l in stats.cpu.labels %} "{{ l }}", {% endfor %}],
+			        datasets: [{
+			            label: 'CPU Utilization %',
+			            data: {{ stats.cpu.data }},
+			            borderColor: ['#4782FA'],
+			        }]
+			    },
+			    options: {
+			        scales: {
+			            yAxes: [{
+			                ticks: {
+			                    beginAtZero:true
+			                }
+			            }]
+			        }
+			    }
+			});
+
+			ctx = $("#network-chart")[0].getContext('2d');
+			var network_chart = new Chart(ctx, {
+			    type: 'line',
+			    data: {
+			        labels: [{% for l in stats.network_in.labels %} "{{ l }}", {% endfor %}],
+			        datasets: [{
+			            label: 'Network In (B)',
+			            data: {{ stats.network_in.data }},
+			            borderColor: ['#4782FA'],
+			        }, {
+			            label: 'Network Out (B)',
+			            data: {{ stats.network_out.data }},
+			            borderColor: ['#FA6A47'],
+			        }]
+			    },
+			    options: {
+			        scales: {
+			            yAxes: [{
+			                ticks: {
+			                    beginAtZero:true
+			                }
+			            }]
+			        }
+			    }
+			});
+
+
+			ctx = $("#disk-chart")[0].getContext('2d');
+			var disk_chart = new Chart(ctx, {
+			    type: 'line',
+			    data: {
+			        labels: [{% for l in stats.disk_read.labels %} "{{ l }}", {% endfor %}],
+			        datasets: [{
+			            label: 'Disk Reads (B)',
+			            data: {{ stats.disk_read.data }},
+			            borderColor: ['#4782FA'],
+			        }, {
+			            label: 'Disk Writes (B)',
+			            data: {{ stats.disk_write.data }},
+			            borderColor: ['#FA6A47'],
+			        }]
+			    },
+			    options: {
+			        scales: {
+			            yAxes: [{
+			                ticks: {
+			                    beginAtZero:true
+			                }
+			            }]
+			        }
+			    }
+			});
+		});
+	</script>
+{% endblock %}

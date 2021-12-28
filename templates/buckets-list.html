@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}Buckets{% endblock %}</h1>
+	
+	<form>
+		<a href={{ url_for('create_bucket') }} class="btn btn-primary btn-block">Create New Bucket <span class="glyphicon glyphicon-plus-sign"></span></a>
+	</form>
+
+{% endblock %}
+
+
+{% block app_content %}
+
+	<h2>Available buckets</h2>
+	<div>
+		<ul class="list-group">
+			{% for bucket in buckets %}
+		    <li class="list-group-item">
+		    	<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+					<a type="button" href={{ url_for('delete_bucket', bucket_name=bucket.name, region_name=region_name) }} class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+				</div>
+				&nbsp;
+		    	<a href={{ url_for('bucket', bucket_name=bucket.name, region_name=bucket.bucket_location) }}>{{ bucket.name }}</a>
+		    </li>
+		    {% endfor %}
+		</ul>
+	</div>
+	
+{% endblock %}
+
+
+{% block scripts %}
+  	{{ super() }}
+  	<script type="text/javascript">
+	$(function(){		
+		$('#create-btn').click(function(){
+			{{ url_for('create_bucket') }};
+		});
+	});
+
+	</script>
+{% endblock %}

@@ -1,0 +1,7 @@
+boto3
+Flask
+Flask-WTF
+WTForms
+Flask-Session
+Flask-Bootstrap
+apache-libcloud
